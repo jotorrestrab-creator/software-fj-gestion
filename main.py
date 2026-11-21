@@ -54,4 +54,3 @@ def demostrar_sistema():
 
 if __name__ == "__main__":
     demostrar_sistema()
-"
