@@ -54,7 +54,9 @@ class AplicacionSoftwareFJ:
                         background="#EAF0F6", foreground="#344054", padding=9)
         style.map("Treeview", background=[("selected", "#DCEBFA")],
                   foreground=[("selected", "#172B4D")])
-        style.configure("TLabel", font=("Segoe UI", 9))
+        style.configure("TLabel", font=("Segoe UI", 9),
+                        background="#FFFFFF", foreground="#344054")
+        style.configure("TFrame", background="#FFFFFF")
         style.configure("TEntry", padding=7)
         style.configure("TCombobox", padding=6)
         style.configure("Accion.TButton", padding=(10, 8),
@@ -152,6 +154,11 @@ class AplicacionSoftwareFJ:
         titulos = ("Módulo de clientes", "Catálogo de servicios", "Gestión de reservas")
         self.estado.set(titulos[indice])
 
+    @staticmethod
+    def _dinero(valor):
+        """Presenta importes en pesos colombianos sin decimales."""
+        return "$ " + f"{float(valor):,.0f}".replace(",", ".")
+
     def _campo(self, parent, label, variable):
         ttk.Label(parent, text=label).pack(anchor="w", pady=(7, 0))
         ttk.Entry(parent, textvariable=variable, width=31).pack(fill="x", pady=(3, 2))
@@ -162,11 +169,15 @@ class AplicacionSoftwareFJ:
         tree = ttk.Treeview(frame, columns=columns, show="headings")
         for col, heading, width in zip(columns, headings, widths):
             tree.heading(col, text=heading)
-            tree.column(col, width=width, anchor="w")
-        scroll = ttk.Scrollbar(frame, orient="vertical", command=tree.yview)
-        tree.configure(yscrollcommand=scroll.set)
-        tree.pack(side="left", fill="both", expand=True)
-        scroll.pack(side="right", fill="y")
+            tree.column(col, width=width, minwidth=75, anchor="w", stretch=True)
+        scroll_y = ttk.Scrollbar(frame, orient="vertical", command=tree.yview)
+        scroll_x = ttk.Scrollbar(frame, orient="horizontal", command=tree.xview)
+        tree.configure(yscrollcommand=scroll_y.set, xscrollcommand=scroll_x.set)
+        tree.grid(row=0, column=0, sticky="nsew")
+        scroll_y.grid(row=0, column=1, sticky="ns")
+        scroll_x.grid(row=1, column=0, sticky="ew")
+        frame.rowconfigure(0, weight=1)
+        frame.columnconfigure(0, weight=1)
         return tree
 
     def _tab_clientes(self):
@@ -324,7 +335,7 @@ class AplicacionSoftwareFJ:
             self._seleccionar_id(reserva.id)
             messagebox.showinfo(
                 "Reserva creada",
-                f"Reserva: {reserva.id[:8]}\nTotal: $ {reserva.total}\nEstado: {reserva.estado.value}",
+                f"Reserva: {reserva.id[:8]}\nTotal: {self._dinero(reserva.total)}\nEstado: {reserva.estado.value}",
                 parent=self.root
             )
             self._estado("Reserva creada en estado Pendiente.")
@@ -355,8 +366,10 @@ class AplicacionSoftwareFJ:
             reserva = self._reserva_seleccionada()
             if reserva:
                 total = reserva.procesar()
-                messagebox.showinfo("Procesamiento exitoso", f"Total calculado: $ {total}", parent=self.root)
-                self._estado(f"Reserva procesada. Total: $ {total}")
+                messagebox.showinfo("Procesamiento exitoso", f"Total calculado: {self._dinero(total)}", parent=self.root)
+                self._actualizar()
+                self._seleccionar_id(reserva.id)
+                self._estado(f"Reserva procesada. Total: {self._dinero(total)}")
         except ErrorSistemaFJ as exc:
             messagebox.showerror("No se pudo procesar", str(exc), parent=self.root)
 
@@ -389,7 +402,7 @@ class AplicacionSoftwareFJ:
             ))
             self.tabla_servicios.insert(
                 "", "end",
-                values=(tipo, s.nombre, f"$ {s.tarifa_base}", detalle,
+                values=(tipo, s.nombre, self._dinero(s.tarifa_base), detalle,
                         "Sí" if s.disponible else "No")
             )
 
@@ -397,14 +410,14 @@ class AplicacionSoftwareFJ:
             self.tabla_reservas.insert(
                 "", "end",
                 values=(r.id, r.cliente.nombre, r.servicio.nombre,
-                        str(r.duracion_horas), r.estado.value, f"$ {r.total}")
+                        str(r.duracion_horas), r.estado.value, self._dinero(r.total))
             )
 
         self.combo_clientes["values"] = [
             f"{c.nombre} — {c.correo}" for c in self.gestor_clientes.clientes
         ]
         self.combo_servicios["values"] = [
-            f"{s.nombre} — $ {s.tarifa_base}" for s in self.catalogo.servicios
+            f"{s.nombre} — {self._dinero(s.tarifa_base)}" for s in self.catalogo.servicios
         ]
         self.valor_clientes.set(str(len(self.gestor_clientes.clientes)))
         self.valor_servicios.set(str(sum(1 for s in self.catalogo.servicios if s.disponible)))
