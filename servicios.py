@@ -57,7 +57,7 @@ class Servicio(Entidad):
             raise ServicioNoDisponibleError(f"Servicio no disponible: {self.nombre}")
 
     def calcular_costo(self, cantidad=1, *, impuesto=0, descuento=0):
-        """Calcula el costo base; impuesto y descuento son tasas opcionales."""
+        """Calcula el costo base con cantidad, impuesto y descuento opcionales."""
         unidades = decimal_positivo(cantidad, "La cantidad")
         tasa = decimal_tasa(impuesto, "El impuesto")
         rebaja = decimal_tasa(descuento, "El descuento")
@@ -116,11 +116,14 @@ class ServicioEquipo(Servicio):
             raise DatosInvalidosError("Unidades disponibles deben ser entero no negativo.")
 
     def calcular_costo(self, cantidad=1, *, impuesto=0, descuento=0):
-        """Calcula el alquiler del equipo y verifica que exista inventario."""
+        """Calcula el alquiler del equipo después de validar cantidad e inventario."""
+        unidades = decimal_positivo(cantidad, "La cantidad")
         self.validar_parametros(unidades_disponibles=self.unidades_disponibles)
-        if Decimal(str(cantidad)) > self.unidades_disponibles:
+        if unidades != unidades.to_integral_value():
+            raise DatosInvalidosError("La cantidad de equipos debe ser un número entero.")
+        if unidades > self.unidades_disponibles:
             raise DatosInvalidosError("La cantidad solicitada supera las unidades disponibles.")
-        return super().calcular_costo(cantidad, impuesto=impuesto, descuento=descuento)
+        return super().calcular_costo(unidades, impuesto=impuesto, descuento=descuento)
 
 
 class ServicioAsesoria(Servicio):
@@ -166,7 +169,7 @@ class CatalogoServicios:
         return servicio
 
     def buscar(self, identificador):
-        """Busca un servicio por identificador."""
+        """Busca un servicio por identificador y registra el fallo si no existe."""
         for servicio in self._servicios:
             if servicio.id == identificador:
                 return servicio
