@@ -1,4 +1,4 @@
-""""Punto de entrada de Software FJ."""
+"""Punto de entrada de Software FJ."""
 from clientes import Cliente, GestorClientes
 from servicios import CatalogoServicios, ServicioSala, ServicioEquipo, ServicioAsesoria
 from reservas import GestorReservas
@@ -13,7 +13,7 @@ def demostrar_sistema():
 
     try:
         cliente = clientes.registrar(Cliente("María Gómez", "maria@example.com", "3105551234"))
-        print("\\nCliente:", cliente.resumen())
+        print("\nCliente:", cliente.resumen())
     except ErrorSistemaFJ as exc:
         print("Error controlado al registrar cliente:", exc)
         LOGGER.exception("Registro inicial fallido")
@@ -26,7 +26,7 @@ def demostrar_sistema():
     for servicio in servicios:
         try:
             catalogo.agregar(servicio)
-            print("\\nServicio:", servicio.resumen())
+            print("\nServicio:", servicio.resumen())
         except ErrorSistemaFJ as exc:
             print("Error controlado de servicio:", exc)
             LOGGER.exception("Registro de servicio fallido")
@@ -34,7 +34,7 @@ def demostrar_sistema():
     try:
         reserva = reservas.crear(cliente, servicios[0], 2)
         reserva.confirmar()
-        print("\\nReserva:", reserva.resumen())
+        print("\nReserva:", reserva.resumen())
         print("Total procesado:", reserva.procesar())
     except ErrorSistemaFJ as exc:
         print("Error controlado de reserva:", exc)
@@ -48,9 +48,9 @@ def demostrar_sistema():
         print("No fue posible calcular el costo:", exc)
         LOGGER.exception("Cálculo demostrativo fallido")
     else:
-        print("\\nCosto de dos equipos con impuesto:", costo)
+        print("\nCosto de dos equipos con impuesto:", costo)
 
-    print("\\nEjecución finalizada. Revise logs/sistema.log.")
+    print("\nEjecución finalizada. Revise logs/sistema.log.")
 
 if __name__ == "__main__":
     demostrar_sistema()
