@@ -4,7 +4,10 @@ from entidades import Entidad
 from excepciones import DatosInvalidosError
 from logger_config import LOGGER
 
+
 class Cliente(Entidad):
+    """Representa un cliente y protege sus datos mediante propiedades."""
+
     def __init__(self, nombre, correo, telefono):
         super().__init__()
         self.nombre = nombre
@@ -45,17 +48,23 @@ class Cliente(Entidad):
         self._telefono = valor.strip()
 
     def resumen(self):
+        """Devuelve los datos de contacto validados del cliente."""
         return f"{self.nombre} | {self.correo} | {self.telefono}"
 
+
 class GestorClientes:
+    """Administra clientes en una lista durante la ejecución del programa."""
+
     def __init__(self):
         self._clientes = []
 
     @property
     def clientes(self):
+        """Devuelve una vista inmutable de los clientes registrados."""
         return tuple(self._clientes)
 
     def registrar(self, cliente):
+        """Registra un cliente y evita duplicados por correo electrónico."""
         if not isinstance(cliente, Cliente):
             raise DatosInvalidosError("Se requiere un objeto Cliente.")
         if any(c.correo == cliente.correo for c in self._clientes):
@@ -65,7 +74,9 @@ class GestorClientes:
         return cliente
 
     def buscar(self, identificador):
+        """Busca un cliente por ID y registra el intento fallido."""
         for cliente in self._clientes:
             if cliente.id == identificador:
                 return cliente
+        LOGGER.error("Búsqueda de cliente fallida; ID inexistente: %s", identificador)
         raise LookupError(f"Cliente inexistente: {identificador}")
