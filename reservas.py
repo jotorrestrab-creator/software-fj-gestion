@@ -80,4 +80,3 @@ class GestorReservas:
 
     def cancelar(self, identificador, motivo="Sin especificar"):
         self.buscar(identificador).cancelar(motivo)
-"
