@@ -16,7 +16,7 @@ python main.py
 python pruebas.py
 ```
 
-La batería automatizada contiene 24 escenarios positivos y negativos. Cada escenario se ejecuta de forma aislada para que una excepción esperada no interrumpa los casos posteriores.
+La batería automatizada contiene 26 escenarios positivos y negativos. Cada escenario se ejecuta de forma aislada para que una excepción esperada no interrumpa los casos posteriores.
 
 ## Estructura
 - `entidades.py`: clase abstracta base Entidad.
@@ -26,7 +26,7 @@ La batería automatizada contiene 24 escenarios positivos y negativos. Cada esce
 - `excepciones.py`: excepciones personalizadas y registro de errores del dominio.
 - `logger_config.py`: configuración del registro de eventos.
 - `main.py`: demostración de operaciones.
-- `pruebas.py`: batería de 24 escenarios.
+- `pruebas.py`: batería de 26 escenarios.
 - `docs/ESCENARIOS_DE_PRUEBA.md`: matriz de pruebas.
 
 ## Reglas de funcionamiento
@@ -37,7 +37,7 @@ La batería automatizada contiene 24 escenarios positivos y negativos. Cada esce
 - La función de cálculo acepta parámetros opcionales de impuesto y descuento. En Python, esta variante con parámetros opcionales permite cubrir el comportamiento de sobrecarga requerido en el ejercicio sin duplicar firmas de método.
 
 ## Pruebas
-Los resultados esperados de los 24 escenarios están documentados en `docs/ESCENARIOS_DE_PRUEBA.md`. Una prueba negativa es satisfactoria cuando el sistema rechaza la operación mediante una excepción controlada y continúa ejecutando las demás pruebas.
+Los resultados esperados de los 26 escenarios están documentados en `docs/ESCENARIOS_DE_PRUEBA.md`. Una prueba negativa es satisfactoria cuando el sistema rechaza la operación mediante una excepción controlada y continúa ejecutando las demás pruebas.
 
 ## Alcance y limitaciones
 Los datos operativos existen únicamente durante la ejecución y se pierden al cerrar el programa. Los escenarios son simulados y no representan una conexión con servicios externos ni persistencia de reservas.
