@@ -27,7 +27,7 @@ class Cliente(Entidad):
 
     @correo.setter
     def correo(self, valor):
-        patron = r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        patron = r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
         if not isinstance(valor, str) or not re.fullmatch(patron, valor.strip()):
             raise DatosInvalidosError("Correo electrónico inválido.")
         self._correo = valor.strip().lower()
@@ -38,9 +38,9 @@ class Cliente(Entidad):
 
     @telefono.setter
     def telefono(self, valor):
-        if not isinstance(valor, str) or not re.fullmatch(r"[+0-9()\\- ]{7,20}", valor):
+        if not isinstance(valor, str) or not re.fullmatch(r"[+0-9()\- ]{7,20}", valor):
             raise DatosInvalidosError("Teléfono inválido.")
-        if len(re.sub(r"\\D", "", valor)) < 7:
+        if len(re.sub(r"\D", "", valor)) < 7:
             raise DatosInvalidosError("El teléfono debe tener al menos 7 dígitos.")
         self._telefono = valor.strip()
 
