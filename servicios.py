@@ -1,4 +1,4 @@
-""""Servicios abstractos y especializados."""
+"""Servicios abstractos y especializados."""
 from abc import abstractmethod
 from decimal import Decimal, InvalidOperation
 from entidades import Entidad
