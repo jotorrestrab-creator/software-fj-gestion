@@ -4,8 +4,8 @@ from servicios import (
     CatalogoServicios, ServicioSala, ServicioEquipo, ServicioAsesoria
 )
 from reservas import GestorReservas
-from excepciones import DatosInvalidosError, TransicionEstadoError
-from logger_config import LOGGER
+from excepciones import DatosInvalidosError, ReservaInvalidaError, TransicionEstadoError
+from logger_config import LOGGER\nfrom pathlib import Path
 
 
 def ejecutar_pruebas():
@@ -97,6 +97,41 @@ def ejecutar_pruebas():
              lambda: equipo.calcular_costo(1.5), True)
     ejecutar(26, "Rechazar cantidad de equipos no numérica",
              lambda: equipo.calcular_costo("varios"), True)
+
+    def comprobar_encadenamiento():
+        """Provoca un fallo interno y comprueba que se conserva como causa."""
+        reserva_prueba = reservas.crear(cliente, sala, 1)
+
+        def calculo_con_fallo(*args, **kwargs):
+            raise DatosInvalidosError("Fallo interno simulado para probar el encadenamiento.")
+
+        reserva_prueba.servicio.calcular_costo = calculo_con_fallo
+        try:
+            reserva_prueba.procesar()
+        except ReservaInvalidaError as exc:
+            if not isinstance(exc.__cause__, DatosInvalidosError):
+                raise AssertionError("No se conservó la excepción original como causa.")
+            return f"Causa original conservada: {type(exc.__cause__).__name__}"
+        raise AssertionError("Se esperaba ReservaInvalidaError.")
+
+    ejecutar(27, "Verificar encadenamiento de excepciones",
+             comprobar_encadenamiento)
+
+    def comprobar_registro_error():
+        """Genera un error único y verifica su escritura efectiva en el archivo."""
+        identificador = "PRUEBA_LOG_FASE4_2026"
+        try:
+            raise DatosInvalidosError(identificador)
+        except DatosInvalidosError:
+            pass
+        archivo_log = Path(__file__).resolve().parent / "logs" / "sistema.log"
+        contenido_log = archivo_log.read_text(encoding="utf-8")
+        if identificador not in contenido_log:
+            raise AssertionError("El error no aparece en logs/sistema.log.")
+        return f"Error registrado en {archivo_log.relative_to(Path(__file__).resolve().parent)}"
+
+    ejecutar(28, "Verificar escritura efectiva de errores en el log",
+             comprobar_registro_error)
 
     total = correctos + fallidos
     print(f"\nResumen: {correctos} correctas; {fallidos} fallidas; total {total}.")
