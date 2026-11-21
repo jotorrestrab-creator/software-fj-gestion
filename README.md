@@ -32,7 +32,7 @@ La batería automatizada contiene 28 escenarios positivos y negativos.
 - **Validaciones:** mostrar errores controlados mediante ventanas emergentes.
 - **Registro:** conservar los eventos y errores técnicos en `logs/sistema.log`.
 
-Al iniciar, se cargan tres servicios de demostración: Sala Norte, Proyector y Asesoría Python.
+Al iniciar, se cargan diez servicios de demostración: tres espacios (Sala Norte, Sala de reuniones y Auditorio principal), cuatro equipos (Proyector, Computador portátil, Equipo de sonido y Cámara de video) y tres asesorías (Python, empresarial y tecnológica).
 
 ## Estructura
 - `entidades.py`: clase abstracta base Entidad.
@@ -47,7 +47,7 @@ Al iniciar, se cargan tres servicios de demostración: Sala Norte, Proyector y A
 - `docs/ESCENARIOS_DE_PRUEBA.md`: matriz de pruebas.
 
 ## Reglas de funcionamiento y alcance
-- Clientes, servicios y reservas se gestionan en objetos y listas durante la ejecución.
+- Clientes, servicios y reservas se gestionan en objetos y listas durante la ejecución. Al cerrar la aplicación, la información operativa se reinicia; no se usa base de datos ni almacenamiento persistente.
 - No se utiliza base de datos.
 - Los datos operativos se pierden al cerrar la aplicación; el archivo de log no es almacenamiento de datos de negocio.
 - Los servicios especializados redefinen `calcular_costo` y aplican sus validaciones particulares.
