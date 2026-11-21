@@ -234,12 +234,22 @@ class AplicacionSoftwareFJ:
         self.combo_servicios.pack(fill="x", pady=(3, 10))
         self._campo(form, "Duración / cantidad", self.duracion)
         ttk.Button(form, text="Crear reserva", style="Accion.TButton",
-                   command=self._crear_reserva).pack(fill="x", pady=(12, 7))
-        ttk.Separator(form).pack(fill="x", pady=8)
-        ttk.Label(form, text="Selecciona una reserva en la tabla:").pack(anchor="w")
-        ttk.Button(form, text="Confirmar", command=self._confirmar).pack(fill="x", pady=(7, 4))
-        ttk.Button(form, text="Procesar", command=self._procesar).pack(fill="x", pady=4)
-        ttk.Button(form, text="Cancelar", command=self._cancelar).pack(fill="x", pady=4)
+                   command=self._crear_reserva).pack(fill="x", pady=(10, 5))
+        ttk.Separator(form).pack(fill="x", pady=5)
+        ttk.Label(form, text="Acciones de la reserva seleccionada").pack(anchor="w", pady=(0, 5))
+        acciones = ttk.Frame(form)
+        acciones.pack(fill="x")
+        acciones.columnconfigure(0, weight=1)
+        acciones.columnconfigure(1, weight=1)
+        ttk.Button(acciones, text="Confirmar", command=self._confirmar).grid(
+            row=0, column=0, sticky="ew", padx=(0, 3), pady=3
+        )
+        ttk.Button(acciones, text="Procesar", command=self._procesar).grid(
+            row=0, column=1, sticky="ew", padx=(3, 0), pady=3
+        )
+        ttk.Button(acciones, text="Cancelar", command=self._cancelar).grid(
+            row=1, column=0, columnspan=2, sticky="ew", pady=3
+        )
         self.tabla_reservas = self._tabla(
             self.tab_reservas,
             ("id", "cliente", "servicio", "cantidad", "estado", "total"),
@@ -248,11 +258,21 @@ class AplicacionSoftwareFJ:
         )
 
     def _cargar_servicios_demo(self):
-        for servicio in (
+        # Catálogo inicial de demostración. Los datos viven en memoria y
+        # se reconstruyen desde cero cada vez que se abre la aplicación.
+        servicios_demo = (
             ServicioSala("Sala Norte", 75000, 10),
+            ServicioSala("Sala de reuniones", 60000, 6),
+            ServicioSala("Auditorio principal", 180000, 80),
             ServicioEquipo("Proyector", 35000, 4),
+            ServicioEquipo("Computador portátil", 50000, 8),
+            ServicioEquipo("Equipo de sonido", 65000, 3),
+            ServicioEquipo("Cámara de video", 45000, 5),
             ServicioAsesoria("Asesoría Python", 95000, "Programación orientada a objetos"),
-        ):
+            ServicioAsesoria("Asesoría empresarial", 120000, "Gestión empresarial"),
+            ServicioAsesoria("Asesoría tecnológica", 110000, "Tecnología y transformación digital"),
+        )
+        for servicio in servicios_demo:
             self.catalogo.agregar(servicio)
 
     def _etiqueta_extra(self, _event=None):
