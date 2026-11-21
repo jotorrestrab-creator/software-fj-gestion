@@ -220,7 +220,7 @@ class AplicacionSoftwareFJ:
             self._seleccionar_id(reserva.id)
             messagebox.showinfo(
                 "Reserva creada",
-                f"Reserva: {reserva.id[:8]}\\nTotal: $ {reserva.total}\\nEstado: {reserva.estado.value}",
+                f"Reserva: {reserva.id[:8]}\nTotal: $ {reserva.total}\nEstado: {reserva.estado.value}",
                 parent=self.root
             )
             self._estado("Reserva creada en estado Pendiente.")
