@@ -2,21 +2,37 @@
 
 Proyecto académico de Programación (213023), Fase 4 – Prácticas simuladas, UNAD.
 
-Aplicación de consola en Python que aplica programación orientada a objetos: abstracción, herencia, encapsulamiento, polimorfismo y manejo de excepciones personalizadas.
+Aplicación en Python con programación orientada a objetos y una interfaz gráfica de escritorio desarrollada con Tkinter.
 
 ## Requisitos
 - Python 3.10 o superior.
-- No requiere paquetes externos.
+- Tkinter (incluido habitualmente en las instalaciones estándar de Python).
+- No requiere paquetes externos adicionales.
 
 ## Ejecución
-Desde la carpeta raíz:
+Desde la carpeta raíz del proyecto:
 
 ```bash
-python main.py
-python pruebas.py
+python -X utf8 interfaz.py
 ```
 
-La batería automatizada contiene 28 escenarios positivos y negativos. Cada escenario se ejecuta de forma aislada para que una excepción esperada no interrumpa los casos posteriores.
+Se abrirá la interfaz gráfica con las pestañas Clientes, Servicios y Reservas. También se conserva la demostración por consola:
+
+```bash
+python -X utf8 main.py
+python -X utf8 pruebas.py
+```
+
+La batería automatizada contiene 28 escenarios positivos y negativos.
+
+## Funciones de la interfaz
+- **Clientes:** registrar clientes con validación de nombre, correo y teléfono.
+- **Servicios:** agregar salas, alquiler de equipos y asesorías con sus parámetros específicos.
+- **Reservas:** crear reservas, confirmarlas, procesarlas y cancelarlas.
+- **Validaciones:** mostrar errores controlados mediante ventanas emergentes.
+- **Registro:** conservar los eventos y errores técnicos en `logs/sistema.log`.
+
+Al iniciar, se cargan tres servicios de demostración: Sala Norte, Proyector y Asesoría Python.
 
 ## Estructura
 - `entidades.py`: clase abstracta base Entidad.
@@ -25,19 +41,17 @@ La batería automatizada contiene 28 escenarios positivos y negativos. Cada esce
 - `reservas.py`: reservas, estados y transiciones.
 - `excepciones.py`: excepciones personalizadas y registro de errores del dominio.
 - `logger_config.py`: configuración del registro de eventos.
-- `main.py`: demostración de operaciones.
+- `main.py`: demostración por consola.
+- `interfaz.py`: interfaz gráfica de escritorio con Tkinter.
 - `pruebas.py`: batería de 28 escenarios.
 - `docs/ESCENARIOS_DE_PRUEBA.md`: matriz de pruebas.
 
-## Reglas de funcionamiento
+## Reglas de funcionamiento y alcance
 - Clientes, servicios y reservas se gestionan en objetos y listas durante la ejecución.
 - No se utiliza base de datos.
-- El archivo `logs/sistema.log` se utiliza exclusivamente para registrar eventos y errores técnicos; no es almacenamiento de datos de negocio.
-- Los servicios especializados redefinen `calcular_costo` y aplican sus validaciones particulares antes de delegar el cálculo común.
-- La función de cálculo acepta parámetros opcionales de impuesto y descuento. En Python, esta variante con parámetros opcionales permite cubrir el comportamiento de sobrecarga requerido en el ejercicio sin duplicar firmas de método.
+- Los datos operativos se pierden al cerrar la aplicación; el archivo de log no es almacenamiento de datos de negocio.
+- Los servicios especializados redefinen `calcular_costo` y aplican sus validaciones particulares.
+- La función de cálculo acepta parámetros opcionales de impuesto y descuento como variante de cálculo.
 
 ## Pruebas
 Los resultados esperados de los 28 escenarios están documentados en `docs/ESCENARIOS_DE_PRUEBA.md`. Una prueba negativa es satisfactoria cuando el sistema rechaza la operación mediante una excepción controlada y continúa ejecutando las demás pruebas.
-
-## Alcance y limitaciones
-Los datos operativos existen únicamente durante la ejecución y se pierden al cerrar el programa. Los escenarios son simulados y no representan una conexión con servicios externos ni persistencia de reservas.
