@@ -93,6 +93,10 @@ def ejecutar_pruebas():
              lambda: catalogo.buscar("id-inexistente"), True)
     ejecutar(24, "Rechazar creación de reserva con cliente inválido",
              lambda: reservas.crear("no es cliente", sala, 1), True)
+    ejecutar(25, "Rechazar cantidad fraccionaria de equipos",
+             lambda: equipo.calcular_costo(1.5), True)
+    ejecutar(26, "Rechazar cantidad de equipos no numérica",
+             lambda: equipo.calcular_costo("varios"), True)
 
     total = correctos + fallidos
     print(f"\nResumen: {correctos} correctas; {fallidos} fallidas; total {total}.")
