@@ -1,0 +1,24 @@
+name: Pruebas Python
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v4
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verificar sintaxis
+        run: python -m compileall -q .
+      - name: Ejecutar escenarios
+        run: python pruebas.py
+      - name: Ejecutar demostración
+        run: python main.py
