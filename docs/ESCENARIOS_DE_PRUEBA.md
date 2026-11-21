@@ -1,6 +1,6 @@
 # Escenarios de prueba — Software FJ
 
-La batería automatizada de `pruebas.py` ejecuta 24 escenarios independientes. Los casos negativos se consideran satisfactorios cuando se genera una excepción y el programa continúa con el siguiente caso.
+La batería automatizada de `pruebas.py` ejecuta 28 escenarios independientes. Los casos negativos se consideran satisfactorios cuando se genera una excepción y el programa continúa con el siguiente caso.
 
 | N.º | Operación | Resultado esperado |
 |---:|---|---|
@@ -27,7 +27,7 @@ La batería automatizada de `pruebas.py` ejecuta 24 escenarios independientes. L
 | 21 | Solicitar más equipos que el inventario | Excepción de validación |
 | 22 | Crear reserva con duración no numérica | Excepción de validación |
 | 23 | Buscar un servicio inexistente | Búsqueda fallida controlada |
-| 24 | Crear reserva con cliente de tipo incorrecto | Excepción de validación |\n| 25 | Solicitar cantidad fraccionaria de equipos | Excepción de validación |\n| 26 | Solicitar cantidad de equipos no numérica | Excepción de validación |
+| 24 | Crear reserva con cliente de tipo incorrecto | Excepción de validación |\n| 25 | Solicitar cantidad fraccionaria de equipos | Excepción de validación |\n| 26 | Solicitar cantidad de equipos no numérica | Excepción de validación |\n| 27 | Provocar un error interno durante el procesamiento | ReservaInvalidaError conserva DatosInvalidosError como causa |\n| 28 | Generar un error identificable | El identificador aparece en logs/sistema.log |
 
 ## Ejecución y evidencia
 
