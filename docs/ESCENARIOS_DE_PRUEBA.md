@@ -27,7 +27,7 @@ La batería automatizada de `pruebas.py` ejecuta 24 escenarios independientes. L
 | 21 | Solicitar más equipos que el inventario | Excepción de validación |
 | 22 | Crear reserva con duración no numérica | Excepción de validación |
 | 23 | Buscar un servicio inexistente | Búsqueda fallida controlada |
-| 24 | Crear reserva con cliente de tipo incorrecto | Excepción de validación |
+| 24 | Crear reserva con cliente de tipo incorrecto | Excepción de validación |\n| 25 | Solicitar cantidad fraccionaria de equipos | Excepción de validación |\n| 26 | Solicitar cantidad de equipos no numérica | Excepción de validación |
 
 ## Ejecución y evidencia
 
