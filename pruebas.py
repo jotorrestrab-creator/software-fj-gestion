@@ -1,4 +1,4 @@
-""""Batería reproducible de 15 escenarios de prueba."""
+"""Batería reproducible de 15 escenarios de prueba."""
 from clientes import Cliente, GestorClientes
 from servicios import CatalogoServicios, ServicioSala, ServicioEquipo, ServicioAsesoria
 from reservas import GestorReservas
@@ -56,7 +56,7 @@ def ejecutar_pruebas():
     ejecutar(14, "Cancelar reserva confirmada", lambda: (reserva.cancelar("Solicitud del cliente"), reserva)[1])
     ejecutar(15, "Rechazar procesamiento de reserva cancelada", lambda: reserva.procesar(), True)
 
-    print(f"\\nResumen: {correctos} correctas; {fallidos} fallidas; total {correctos + fallidos}.")
+    print(f"\nResumen: {correctos} correctas; {fallidos} fallidas; total {correctos + fallidos}.")
     LOGGER.info("Resumen de pruebas: %s correctas, %s fallidas", correctos, fallidos)
     return correctos, fallidos
 
