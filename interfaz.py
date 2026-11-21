@@ -36,37 +36,121 @@ class AplicacionSoftwareFJ:
             style.theme_use("clam")
         except tk.TclError:
             pass
-        style.configure("Titulo.TLabel", font=("Segoe UI", 19, "bold"))
-        style.configure("Treeview", rowheight=27)
-        style.configure("Treeview.Heading", font=("Segoe UI", 9, "bold"))
-        style.configure("Accion.TButton", padding=(9, 7))
+        style.configure("Titulo.TLabel", font=("Segoe UI", 22, "bold"),
+                        foreground="#172B4D", background="#F3F6FB")
+        style.configure("Subtitulo.TLabel", font=("Segoe UI", 10),
+                        foreground="#667085", background="#F3F6FB")
+        style.configure("Seccion.TLabel", font=("Segoe UI", 12, "bold"),
+                        foreground="#172B4D", background="#FFFFFF")
+        style.configure("Tarjeta.TFrame", background="#FFFFFF", relief="flat")
+        style.configure("TarjetaTitulo.TLabel", font=("Segoe UI", 9),
+                        foreground="#667085", background="#FFFFFF")
+        style.configure("TarjetaValor.TLabel", font=("Segoe UI", 19, "bold"),
+                        foreground="#172B4D", background="#FFFFFF")
+        style.configure("Treeview", rowheight=32, font=("Segoe UI", 9),
+                        background="#FFFFFF", fieldbackground="#FFFFFF",
+                        foreground="#344054", borderwidth=0)
+        style.configure("Treeview.Heading", font=("Segoe UI", 9, "bold"),
+                        background="#EAF0F6", foreground="#344054", padding=9)
+        style.map("Treeview", background=[("selected", "#DCEBFA")],
+                  foreground=[("selected", "#172B4D")])
+        style.configure("TLabel", font=("Segoe UI", 9))
+        style.configure("TEntry", padding=7)
+        style.configure("TCombobox", padding=6)
+        style.configure("Accion.TButton", padding=(10, 8),
+                        font=("Segoe UI", 9, "bold"))
+        style.configure("TButton", padding=(9, 7))
+        style.configure("TLabelframe", background="#FFFFFF")
+        style.configure("TLabelframe.Label", font=("Segoe UI", 10, "bold"),
+                        foreground="#172B4D", background="#FFFFFF")
+        style.configure("TNotebook", background="#F3F6FB", borderwidth=0)
+        style.layout("Oculto.TNotebook.Tab", [])
 
     def _construir(self):
-        base = ttk.Frame(self.root, padding=18)
-        base.pack(fill="both", expand=True)
-        ttk.Label(base, text="SOFTWARE FJ", style="Titulo.TLabel").pack(anchor="w")
-        ttk.Label(
-            base,
-            text="Sistema integral de gestión de clientes, servicios y reservas",
-        ).pack(anchor="w", pady=(2, 14))
+        self.root.configure(bg="#F3F6FB")
+        contenedor = tk.Frame(self.root, bg="#F3F6FB")
+        contenedor.pack(fill="both", expand=True)
+
+        # Menú lateral de navegación.
+        lateral = tk.Frame(contenedor, bg="#172B4D", width=205)
+        lateral.pack(side="left", fill="y")
+        lateral.pack_propagate(False)
+        tk.Label(lateral, text="SOFTWARE FJ", bg="#172B4D", fg="#FFFFFF",
+                 font=("Segoe UI", 17, "bold")).pack(anchor="w", padx=20, pady=(28, 2))
+        tk.Label(lateral, text="GESTIÓN INTEGRAL", bg="#172B4D", fg="#AFC2DA",
+                 font=("Segoe UI", 8, "bold")).pack(anchor="w", padx=21, pady=(0, 30))
+        self.nav_botones = []
+        for texto, indice in (("▦  Clientes", 0), ("▤  Servicios", 1), ("▣  Reservas", 2)):
+            boton = tk.Button(
+                lateral, text=texto, anchor="w", relief="flat", bd=0,
+                bg="#172B4D", fg="#DCE6F2", activebackground="#29466D",
+                activeforeground="#FFFFFF", font=("Segoe UI", 10),
+                padx=20, pady=13, cursor="hand2",
+                command=lambda i=indice: self._mostrar_tab(i)
+            )
+            boton.pack(fill="x", padx=10, pady=3)
+            self.nav_botones.append(boton)
+        tk.Label(lateral, text="SOFTWARE FJ  •  v1.0", bg="#172B4D",
+                 fg="#8FA5C0", font=("Segoe UI", 8)).pack(side="bottom", pady=18)
+
+        # Área principal.
+        principal = tk.Frame(contenedor, bg="#F3F6FB")
+        principal.pack(side="left", fill="both", expand=True)
+        encabezado = tk.Frame(principal, bg="#F3F6FB")
+        encabezado.pack(fill="x", padx=26, pady=(22, 13))
+        ttk.Label(encabezado, text="Panel de gestión", style="Titulo.TLabel").pack(anchor="w")
+        ttk.Label(encabezado,
+                  text="Administra clientes, servicios y reservas desde un solo lugar.",
+                  style="Subtitulo.TLabel").pack(anchor="w", pady=(3, 0))
+
+        # Indicadores rápidos.
+        indicadores = tk.Frame(principal, bg="#F3F6FB")
+        indicadores.pack(fill="x", padx=26, pady=(0, 15))
+        self.valor_clientes = tk.StringVar(value="0")
+        self.valor_servicios = tk.StringVar(value="0")
+        self.valor_reservas = tk.StringVar(value="0")
+        self.valor_confirmadas = tk.StringVar(value="0")
+        for titulo, variable in (
+            ("CLIENTES REGISTRADOS", self.valor_clientes),
+            ("SERVICIOS DISPONIBLES", self.valor_servicios),
+            ("RESERVAS CREADAS", self.valor_reservas),
+            ("RESERVAS CONFIRMADAS", self.valor_confirmadas),
+        ):
+            tarjeta = ttk.Frame(indicadores, style="Tarjeta.TFrame", padding=(15, 12))
+            tarjeta.pack(side="left", fill="both", expand=True, padx=(0, 10))
+            ttk.Label(tarjeta, text=titulo, style="TarjetaTitulo.TLabel").pack(anchor="w")
+            ttk.Label(tarjeta, textvariable=variable, style="TarjetaValor.TLabel").pack(anchor="w", pady=(5, 0))
 
         self.estado = tk.StringVar(value="Sistema listo.")
-        ttk.Label(base, textvariable=self.estado, relief="groove", padding=7).pack(
-            side="bottom", fill="x", pady=(12, 0)
-        )
-        self.tabs = ttk.Notebook(base)
-        self.tabs.pack(fill="both", expand=True)
+        barra_estado = tk.Frame(principal, bg="#E7EDF5")
+        barra_estado.pack(side="bottom", fill="x", padx=26, pady=(10, 18))
+        tk.Label(barra_estado, textvariable=self.estado, bg="#E7EDF5",
+                 fg="#475467", font=("Segoe UI", 9), anchor="w",
+                 padx=12, pady=9).pack(fill="x")
 
+        self.tabs = ttk.Notebook(principal, style="Oculto.TNotebook")
+        self.tabs.pack(fill="both", expand=True, padx=26, pady=(0, 4))
         self.tab_clientes = ttk.Frame(self.tabs, padding=14)
         self.tab_servicios = ttk.Frame(self.tabs, padding=14)
         self.tab_reservas = ttk.Frame(self.tabs, padding=14)
-        self.tabs.add(self.tab_clientes, text="  Clientes  ")
-        self.tabs.add(self.tab_servicios, text="  Servicios  ")
-        self.tabs.add(self.tab_reservas, text="  Reservas  ")
+        self.tabs.add(self.tab_clientes, text="Clientes")
+        self.tabs.add(self.tab_servicios, text="Servicios")
+        self.tabs.add(self.tab_reservas, text="Reservas")
 
         self._tab_clientes()
         self._tab_servicios()
         self._tab_reservas()
+        self._mostrar_tab(0)
+
+    def _mostrar_tab(self, indice):
+        self.tabs.select(indice)
+        for posicion, boton in enumerate(self.nav_botones):
+            if posicion == indice:
+                boton.configure(bg="#29466D", fg="#FFFFFF")
+            else:
+                boton.configure(bg="#172B4D", fg="#DCE6F2")
+        titulos = ("Módulo de clientes", "Catálogo de servicios", "Gestión de reservas")
+        self.estado.set(titulos[indice])
 
     def _campo(self, parent, label, variable):
         ttk.Label(parent, text=label).pack(anchor="w", pady=(7, 0))
@@ -302,6 +386,13 @@ class AplicacionSoftwareFJ:
         self.combo_servicios["values"] = [
             f"{s.nombre} — $ {s.tarifa_base}" for s in self.catalogo.servicios
         ]
+        self.valor_clientes.set(str(len(self.gestor_clientes.clientes)))
+        self.valor_servicios.set(str(sum(1 for s in self.catalogo.servicios if s.disponible)))
+        self.valor_reservas.set(str(len(self.gestor_reservas.reservas)))
+        self.valor_confirmadas.set(str(sum(
+            1 for r in self.gestor_reservas.reservas
+            if r.estado.value == "Confirmada"
+        )))
 
     def _seleccionar_id(self, rid):
         for item in self.tabla_reservas.get_children():
