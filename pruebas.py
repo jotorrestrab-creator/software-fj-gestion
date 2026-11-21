@@ -5,7 +5,8 @@ from servicios import (
 )
 from reservas import GestorReservas
 from excepciones import DatosInvalidosError, ReservaInvalidaError, TransicionEstadoError
-from logger_config import LOGGER\nfrom pathlib import Path
+from logger_config import LOGGER
+from pathlib import Path
 
 
 def ejecutar_pruebas():
